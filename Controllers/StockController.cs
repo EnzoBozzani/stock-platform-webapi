@@ -19,7 +19,6 @@ namespace api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            //.Select funciona como o .map() do JavaScript
             var stocks = _context.Stocks.ToList()
                 .Select(s => s.ToStockDto());
 
@@ -29,7 +28,6 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public IActionResult GetStockById([FromRoute] Guid id)
         {
-            //.Find permite buscar pela PK
             var stock = _context.Stocks.Find(id);
 
             if (stock == null)
@@ -47,7 +45,6 @@ namespace api.Controllers
             _context.Stocks.Add(stockModel);
             _context.SaveChanges();
 
-            //irá executar o GetStockById, passando o Id e retornando no formato StockDto
             return CreatedAtAction(nameof(GetStockById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
@@ -98,6 +95,24 @@ namespace api.Controllers
 
             return Ok(stock.ToStockDto());
 
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteStock([FromRoute] Guid id)
+        {
+            var stock = _context.Stocks.Find(id);
+
+            if (stock == null)
+            {
+                return NotFound();
+            }
+
+            _context.Stocks.Remove(stock);
+
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
 }
