@@ -1,6 +1,8 @@
 using api.Data;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
+using api.Interfaces;
+using api.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     Env.Load();
     options.UseNpgsql(Environment.GetEnvironmentVariable("CONN_STRING"));
 });
+
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
