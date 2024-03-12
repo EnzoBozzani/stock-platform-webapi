@@ -9,9 +9,7 @@ namespace api.Data
         {
 
         }
-        //usado para acessar toda a tabela de Stocks
         public DbSet<Stock> Stocks { get; set; }
-        //e de Comments
         public DbSet<Comment> Comments { get; set; }
     }
 }
