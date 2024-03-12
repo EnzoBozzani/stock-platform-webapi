@@ -24,7 +24,7 @@ namespace api.Repository
 
         public async Task<Stock?> DeleteAsync(Guid id)
         {
-            var stockModel = await _context.Stocks.FindAsync(id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == id);
 
             if (stockModel == null)
             {
@@ -39,12 +39,12 @@ namespace api.Repository
 
         public async Task<List<Stock>> GetAllAsync()
         {
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks.Include(s => s.Comments).ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(Guid id)
         {
-            return await _context.Stocks.FindAsync(id);
+            return await _context.Stocks.Include(s => s.Comments).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<Stock?> UpdateAsync(Guid id, UpdateStockDto updateStock)
