@@ -27,7 +27,8 @@ namespace api.Controllers
             return Ok(commentsDtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
@@ -40,7 +41,8 @@ namespace api.Controllers
             return Ok(comment.ToCommentDto());
         }
 
-        [HttpPost("{stockId}")]
+        [HttpPost]
+        [Route("{stockId}")]
         public async Task<IActionResult> Create([FromRoute] Guid stockId, [FromBody] CreateCommentDto commentDto)
         {
             bool stockExists = await _stockRepository.StockExists(stockId);
@@ -54,7 +56,35 @@ namespace api.Controllers
 
             await _commentRepository.CreateAsync(commentModel);
 
-            return CreatedAtAction(nameof(GetById), new { id = commentModel }, commentModel.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCommentDto updateDto)
+        {
+            var comment = await _commentRepository.UpdateAsync(id, updateDto);
+
+            if (comment == null)
+            {
+                return NotFound("Comment not found!");
+            }
+
+            return Ok(comment.ToCommentDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deletedComment = await _commentRepository.DeleteAsync(id);
+
+            if (deletedComment == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(deletedComment.ToCommentDto());
         }
     }
 }

@@ -28,7 +28,8 @@ namespace api.Controllers
             return Ok(stocksDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetStockById([FromRoute] Guid id)
         {
             var stock = await _stockRepository.GetByIdAsync(id);
