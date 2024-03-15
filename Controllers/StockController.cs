@@ -21,6 +21,11 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var stocks = await _stockRepository.GetAllAsync();
 
             var stocksDto = stocks.Select(s => s.ToStockDto());
@@ -29,9 +34,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> GetStockById([FromRoute] Guid id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var stock = await _stockRepository.GetByIdAsync(id);
 
             if (stock == null)
@@ -45,6 +55,11 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStock([FromBody] CreateStockRequestDto stock)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var stockModel = stock.ToStockFromCreateStockRequestDto();
 
             await _stockRepository.CreateAsync(stockModel);
@@ -53,9 +68,14 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> UpdateStock([FromRoute] Guid id, [FromBody] UpdateStockDto updateStock)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             bool allFieldsAreNull = updateStock.Symbol == null && updateStock.CompanyName == null && updateStock.Industry == null && updateStock.Purchase == null && updateStock.LastDiv == null && updateStock.MarketCap == null;
 
             if (allFieldsAreNull)
@@ -74,9 +94,14 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> DeleteStock([FromRoute] Guid id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var stockModel = await _stockRepository.DeleteAsync(id);
 
             if (stockModel == null)
