@@ -1,6 +1,7 @@
 using api.Dtos.Comment;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -18,6 +19,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
@@ -34,6 +36,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
@@ -53,6 +56,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("{stockId:guid}")]
+        [Authorize]
         public async Task<IActionResult> Create([FromRoute] Guid stockId, [FromBody] CreateCommentDto commentDto)
         {
             if (!ModelState.IsValid)
@@ -76,6 +80,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCommentDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -95,6 +100,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)

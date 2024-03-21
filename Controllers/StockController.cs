@@ -35,6 +35,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetStockById([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
@@ -53,6 +54,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateStock([FromBody] CreateStockRequestDto stock)
         {
             if (!ModelState.IsValid)
@@ -69,6 +71,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> UpdateStock([FromRoute] Guid id, [FromBody] UpdateStockDto updateStock)
         {
             if (!ModelState.IsValid)
@@ -95,6 +98,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> DeleteStock([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
