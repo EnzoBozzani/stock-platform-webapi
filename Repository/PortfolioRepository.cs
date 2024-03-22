@@ -1,5 +1,7 @@
 using api.Data;
+using api.Dtos.Stock;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +14,16 @@ namespace api.Repository
         {
             _context = context;
         }
-        public async Task<List<Stock>> GetUserPortfolio(AppUser user)
+
+        public async Task<Portfolio> CreateAsync(Portfolio portfolio)
+        {
+            await _context.Portfolios.AddAsync(portfolio);
+            await _context.SaveChangesAsync();
+
+            return portfolio;
+        }
+
+        public async Task<List<StockDto>> GetUserPortfolio(AppUser user)
         {
             return await _context.Portfolios.Where(u => u.AppUserId == user.Id)
                 .Select(stock => new Stock
@@ -24,7 +35,7 @@ namespace api.Repository
                     LastDiv = stock.Stock.LastDiv,
                     Industry = stock.Stock.Industry,
                     MarketCap = stock.Stock.MarketCap
-                }).ToListAsync();
+                }.ToStockDto()).ToListAsync();
         }
     }
 }
